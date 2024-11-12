@@ -83,6 +83,10 @@ def get_user_comments(user, limit=100):
 
 def check_user_eligibility(user):
     logging.debug(f"Checking eligibility for user: {user.name}")
+    # Skip evaluation if user is a moderator
+    if user.name in [mod.name for mod in subreddit.moderator()]:
+        logging.info(f"User {user.name} is a moderator and will not be evaluated.")
+        return True
     comments = get_user_comments(user)
     valid_comments = []
     for comment in comments:
